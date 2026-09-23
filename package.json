@@ -1,0 +1,54 @@
+{
+  "name": "opencode-kiro-provider",
+  "version": "0.2.0",
+  "description": "OpenCode provider for Kiro: every model your Kiro subscription offers (GPT-5.6, Claude Opus 5, Sonnet, open-weight), live model list, reuses your kiro-cli login",
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "plugin",
+    "provider",
+    "kiro",
+    "aws",
+    "codewhisperer",
+    "claude",
+    "gpt",
+    "ai"
+  ],
+  "homepage": "https://github.com/JarbesGoldoni/opencode-kiro-provider#readme",
+  "bugs": {
+    "url": "https://github.com/JarbesGoldoni/opencode-kiro-provider/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JarbesGoldoni/opencode-kiro-provider.git"
+  },
+  "license": "MIT",
+  "author": "Jarbes Goldoni (https://github.com/JarbesGoldoni)",
+  "type": "module",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "src",
+    "!src/**/*.test.ts",
+    "INSTALL-AGENT.md"
+  ],
+  "engines": {
+    "opencode": ">=1.14.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "bun test",
+    "typecheck": "tsc --noEmit",
+    "e2e": "bun run test/e2e/run.ts",
+    "smoke": "bun run test/smoke.ts"
+  },
+  "devDependencies": {
+    "@opencode-ai/plugin": "^1.18.0",
+    "@types/bun": "latest",
+    "typescript": "^5.9.0"
+  }
+}
