@@ -28,7 +28,7 @@ export function managementEndpoint(region: string): string {
   return process.env.KIRO_MANAGEMENT_ENDPOINT || `https://management.${region}.kiro.dev`
 }
 
-export const VERSION = "0.2.0"
+export const VERSION = "0.2.1"
 
 /**
  * HTTP `user-agent` for every Kiro call. Kiro rejects Bun's default (`Bun/x.y.z`) with 403

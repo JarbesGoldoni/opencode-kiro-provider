@@ -49,7 +49,7 @@ If it isn't, **ask the user to run `kiro-cli login` themselves**. Organization a
      - an older `opencode-kiro-provider@<version>` entry
 
      Tell the user which entries you removed. **Don't delete a local clone folder** unless the user asks you to.
-   - **Add `"opencode-kiro-provider@<version>"`** with the version from step 3.3, e.g. `"opencode-kiro-provider@0.2.0"`. Pin the version: OpenCode installs a package once and reuses the cached copy, so a pinned version makes sure the machine runs the current release. Keep every other plugin entry unchanged.
+   - **Add `"opencode-kiro-provider@<version>"`** with the version from step 3.3, e.g. `"opencode-kiro-provider@0.2.1"`. Pin the version: OpenCode installs a package once and reuses the cached copy, so a pinned version makes sure the machine runs the current release. Keep every other plugin entry unchanged.
 5. If the config has a `provider.kiro` block left over from an older plugin (for example `"npm": "@ai-sdk/openai-compatible"` or a hand-written `models` list), **show it to the user and ask** before removing it. This plugin fills `provider.kiro` in automatically, and anything left under `provider.kiro.models` overrides the live model list for those model ids.
 
 Example result (keep any other keys the file already has):
@@ -57,7 +57,7 @@ Example result (keep any other keys the file already has):
 ```json
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": ["opencode-kiro-provider@0.2.0"]
+  "plugin": ["opencode-kiro-provider@0.2.1"]
 }
 ```
 

@@ -25,15 +25,15 @@ Requirements: OpenCode ≥ 1.14 and [kiro-cli](https://kiro.dev/cli).
    ```json
    {
      "$schema": "https://opencode.ai/config.json",
-     "plugin": ["opencode-kiro-provider"]
+     "plugin": ["opencode-kiro-provider@0.2.1"]
    }
    ```
    OpenCode installs it from npm on the next start. Remove any other Kiro plugin (such as `opencode-kiro-auth`) from the list, because both register the provider id `kiro`.
-3. Start OpenCode and open `/models`. Kiro models appear as `kiro/<model-id>`, e.g. `kiro/gpt-5.6-sol` or `kiro/claude-opus-5`.
+3. Start OpenCode, type `/models`, and pick a model under **Kiro**.
 
-If no Kiro models show up on the very first start, restart OpenCode once, or run `opencode auth login` → **Kiro** → **Use my kiro-cli login**.
+If no Kiro models show up on the very first start, restart OpenCode once, or type `/connect` in OpenCode, choose **Kiro**, then choose **Use my kiro-cli login**.
 
-**Updating:** OpenCode installs the package once and reuses its cached copy. To upgrade, pin a version (`"opencode-kiro-provider@0.3.0"`), or delete the cached package under `~/.cache/opencode/packages/` and restart OpenCode. The model list doesn't depend on the plugin version, because it's fetched from Kiro.
+**Updating:** OpenCode installs the package once and reuses its cached copy. Pin a version as shown above, and change it to upgrade. Or delete the cached package under `~/.cache/opencode/packages/` and restart OpenCode. The model list doesn't depend on the plugin version, because it's fetched from Kiro.
 
 > **Setting this up with an AI agent?** Point it at [INSTALL-AGENT.md](INSTALL-AGENT.md). It's a step-by-step guide with checks and stop points.
 
@@ -47,21 +47,18 @@ Then put the clone's absolute path in the `plugin` list instead of the package n
 
 ## Usage
 
+Everything happens inside OpenCode, just like with its built-in providers:
+
+- **Pick a model:** type `/models` and choose one under **Kiro**, e.g. *GPT-5.6 Sol (4.4x)* or *Claude Opus 5 (2.2x)*. The number is Kiro's credit multiplier.
+- **Set reasoning effort:** press `ctrl+t` to cycle through the levels the model supports (for example `low` → `high` → `max`), or type `/variants` to pick one. Models without effort control have no variants.
+- **Work as usual:** chat, edit files, run commands and use your agents and MCP servers. OpenCode runs the tools, and Kiro provides the model.
+
+Model availability depends on your Kiro plan and region. Some models (for example GPT‑5.6) are only offered in some regions. `/models` shows exactly what Kiro reports for your account.
+
+The Kiro models work in OpenCode's non-interactive mode too:
+
 ```bash
-opencode run -m kiro/claude-opus-5 "explain this repo"
 opencode run -m kiro/gpt-5.6-sol --variant high "refactor src/app.ts"
-opencode models kiro          # everything your account can use
-```
-
-Model availability depends on your Kiro plan and region. Some models (for example GPT‑5.6) are only offered in some regions, and the plugin shows exactly what Kiro reports for your account.
-
-## Check your account
-
-From a clone, this lists your models and sends one short prompt to `gpt-5.6-sol` and `claude-opus-5`, which costs a few credits:
-
-```bash
-bun run smoke                      # default models
-bun run smoke gpt-5.6-terra auto   # specific models
 ```
 
 ## Configuration
@@ -89,7 +86,7 @@ Errors quote Kiro's own message, followed by a hint:
 | `No Kiro login found` | Run `kiro-cli login`. |
 | "…login has expired or was revoked" | Run `kiro-cli login` again. |
 | "…rejected this client or model" | Your login is fine, but Kiro refused the call, usually because that model isn't enabled for your account or region. Rerun with `KIRO_DEBUG=1` and check the log. |
-| Model list is missing a new model | `KIRO_REFRESH_MODELS=1 opencode models kiro` |
+| A new Kiro model is missing from `/models` | The list is cached for 6 hours. Start OpenCode with `KIRO_REFRESH_MODELS=1` to refetch it. |
 
 ## How it works
 
@@ -117,6 +114,8 @@ bun run e2e        # real opencode binary against a mock Kiro server
 ```
 
 `bun run e2e` uses throwaway config folders and a fake kiro-cli login, so it never touches your real setup. The mock server enforces Kiro's history, tool-pairing and header rules.
+
+To check against your real Kiro account, `bun run smoke` lists your models and sends one short prompt to `gpt-5.6-sol` and `claude-opus-5` (a few credits). Pass model ids to test others: `bun run smoke gpt-5.6-terra auto`.
 
 Issues and pull requests are welcome.
 
