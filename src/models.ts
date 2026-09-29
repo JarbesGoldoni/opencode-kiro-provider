@@ -25,18 +25,25 @@ interface Catalog {
   defaultModel?: string
 }
 
+const claudeEffort = (): Pick<KiroModel, "effortPath" | "effortLevels" | "defaultEffort"> => ({ effortPath: "output_config", effortLevels: ["low", "medium", "high", "xhigh", "max"], defaultEffort: "high" })
+
 /**
  * Used only when the live list and the on-disk cache are both unavailable.
- * IDs are the ones the Kiro IDE/CLI send as `modelId`.
+ * IDs are the ones the Kiro IDE/CLI send as `modelId`. Context windows and multipliers follow
+ * https://kiro.dev/docs/models/ (checked 2026-09-29). GPT-5.6 is listed at 1M, but requests over
+ * 272K are billed at double the rate, so it stays at 272K here.
  */
 const FALLBACK: KiroModel[] = [
-  { modelId: "auto", modelName: "Auto" },
-  { modelId: "claude-opus-5", modelName: "Claude Opus 5", maxInputTokens: 200_000, effortPath: "output_config", effortLevels: ["low", "medium", "high", "xhigh", "max"], defaultEffort: "high" },
-  { modelId: "claude-opus-4.8", modelName: "Claude Opus 4.8", maxInputTokens: 200_000, effortPath: "output_config", effortLevels: ["low", "medium", "high", "xhigh", "max"], defaultEffort: "high" },
-  { modelId: "claude-sonnet-5", modelName: "Claude Sonnet 5", maxInputTokens: 200_000, effortPath: "output_config", effortLevels: ["low", "medium", "high", "xhigh", "max"], defaultEffort: "high" },
-  { modelId: "claude-sonnet-4.6", modelName: "Claude Sonnet 4.6", maxInputTokens: 200_000 },
-  { modelId: "claude-haiku-4.5", modelName: "Claude Haiku 4.5", maxInputTokens: 200_000 },
-  { modelId: "gpt-5.6-sol", modelName: "GPT-5.6 Sol", maxInputTokens: 272_000, effortPath: "reasoning", effortLevels: ["low", "medium", "high", "xhigh"], defaultEffort: "medium" },
+  { modelId: "auto", modelName: "Auto", rateMultiplier: 1 },
+  { modelId: "claude-opus-5.5", modelName: "Claude Opus 5.5", rateMultiplier: 2, maxInputTokens: 1_000_000, ...claudeEffort() },
+  { modelId: "claude-opus-5", modelName: "Claude Opus 5", rateMultiplier: 2.2, maxInputTokens: 1_000_000, ...claudeEffort() },
+  { modelId: "claude-opus-4.8", modelName: "Claude Opus 4.8", rateMultiplier: 2.2, maxInputTokens: 1_000_000, ...claudeEffort() },
+  { modelId: "claude-sonnet-5", modelName: "Claude Sonnet 5", rateMultiplier: 1.3, maxInputTokens: 1_000_000, ...claudeEffort() },
+  { modelId: "claude-sonnet-4.6", modelName: "Claude Sonnet 4.6", rateMultiplier: 1.3, maxInputTokens: 1_000_000 },
+  { modelId: "claude-haiku-4.5", modelName: "Claude Haiku 4.5", rateMultiplier: 0.4, maxInputTokens: 200_000 },
+  { modelId: "gpt-5.6-sol", modelName: "GPT-5.6 Sol", rateMultiplier: 4.4, maxInputTokens: 272_000, effortPath: "reasoning", effortLevels: ["low", "medium", "high", "xhigh"], defaultEffort: "medium" },
+  { modelId: "gpt-5.6-terra", modelName: "GPT-5.6 Terra", rateMultiplier: 2.2, maxInputTokens: 272_000, effortPath: "reasoning", effortLevels: ["low", "medium", "high"], defaultEffort: "medium" },
+  { modelId: "gpt-5.6-luna", modelName: "GPT-5.6 Luna", rateMultiplier: 1.1, maxInputTokens: 272_000, effortPath: "reasoning", effortLevels: ["low", "medium", "high"], defaultEffort: "medium" },
 ]
 
 const CACHE_FILE = () => join(cacheDir(), "models.json")
