@@ -30,7 +30,7 @@ const claudeEffort = (): Pick<KiroModel, "effortPath" | "effortLevels" | "defaul
 /**
  * Used only when the live list and the on-disk cache are both unavailable.
  * IDs are the ones the Kiro IDE/CLI send as `modelId`. Context windows and multipliers follow
- * https://kiro.dev/docs/models/ (checked 2026-09-29). GPT-5.6 is listed at 1M, but requests over
+ * https://kiro.dev/docs/models/ (checked 2026-10-05). GPT-5.6 is listed at 1M, but requests over
  * 272K are billed at double the rate, so it stays at 272K here.
  */
 const FALLBACK: KiroModel[] = [
@@ -38,6 +38,7 @@ const FALLBACK: KiroModel[] = [
   { modelId: "claude-opus-5.5", modelName: "Claude Opus 5.5", rateMultiplier: 2, maxInputTokens: 1_000_000, ...claudeEffort() },
   { modelId: "claude-opus-5", modelName: "Claude Opus 5", rateMultiplier: 2.2, maxInputTokens: 1_000_000, ...claudeEffort() },
   { modelId: "claude-opus-4.8", modelName: "Claude Opus 4.8", rateMultiplier: 2.2, maxInputTokens: 1_000_000, ...claudeEffort() },
+  { modelId: "claude-sonnet-5.5", modelName: "Claude Sonnet 5.5", rateMultiplier: 1.3, maxInputTokens: 1_000_000, ...claudeEffort() },
   { modelId: "claude-sonnet-5", modelName: "Claude Sonnet 5", rateMultiplier: 1.3, maxInputTokens: 1_000_000, ...claudeEffort() },
   { modelId: "claude-sonnet-4.6", modelName: "Claude Sonnet 4.6", rateMultiplier: 1.3, maxInputTokens: 1_000_000 },
   { modelId: "claude-haiku-4.5", modelName: "Claude Haiku 4.5", rateMultiplier: 0.4, maxInputTokens: 200_000 },
